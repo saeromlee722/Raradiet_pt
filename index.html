@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RARADIET · 이새롬 코치 1:1 퍼스널 트레이닝</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,600&family=Noto+Sans+KR:wght@300;400;500;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+–black: #0e0d0b;
+–dark: #181614;
+–charcoal: #242220;
+–brown: #5a3f2b;
+–gold: #c9a96e;
+–gold-light: #e2c99a;
+–cream: #f5ede0;
+–cream-dark: #ede0cc;
+–muted: #8a7a6a;
+–border: rgba(201,169,110,0.2);
+–border-light: rgba(201,169,110,0.1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+background: var(–dark);
+color: var(–cream);
+font-family: ‘Noto Sans KR’, sans-serif;
+font-weight: 300;
+line-height: 1.7;
+overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(–black); }
+::-webkit-scrollbar-thumb { background: var(–gold); }
+
+/* ── NAV ── */
+nav {
+position: fixed;
+top: 0; left: 0; right: 0;
+z-index: 100;
+padding: 20px 40px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+background: linear-gradient(to bottom, rgba(14,13,11,0.95), transparent);
+}
+
+.nav-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 22px;
+font-weight: 400;
+letter-spacing: 0.3em;
+color: var(–gold-light);
+text-decoration: none;
+}
+
+.nav-cta {
+font-size: 11px;
+letter-spacing: 0.3em;
+padding: 10px 24px;
+border: 1px solid var(–gold);
+color: var(–gold);
+text-decoration: none;
+transition: all 0.3s;
+text-transform: uppercase;
+}
+.nav-cta:hover {
+background: var(–gold);
+color: var(–black);
+}
+
+/* ── HERO ── */
+.hero {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+justify-content: center;
+padding: 120px 60px 80px;
+position: relative;
+overflow: hidden;
+}
+
+.hero::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background:
+radial-gradient(ellipse 60% 50% at 80% 50%, rgba(201,169,110,0.07) 0%, transparent 70%),
+radial-gradient(ellipse 40% 60% at 20% 80%, rgba(90,63,43,0.15) 0%, transparent 60%);
+}
+
+.hero-eyebrow {
+font-size: 11px;
+letter-spacing: 0.5em;
+color: var(–gold);
+text-transform: uppercase;
+margin-bottom: 28px;
+opacity: 0;
+animation: fadeUp 0.8s 0.2s ease forwards;
+}
+
+.hero-headline {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(42px, 8vw, 96px);
+font-weight: 400;
+line-height: 1.05;
+color: var(–cream);
+margin-bottom: 32px;
+position: relative;
+opacity: 0;
+animation: fadeUp 0.8s 0.4s ease forwards;
+}
+
+.hero-headline em {
+font-style: italic;
+color: var(–gold-light);
+}
+
+.hero-sub {
+max-width: 480px;
+font-size: 15px;
+color: var(–muted);
+line-height: 1.9;
+margin-bottom: 48px;
+opacity: 0;
+animation: fadeUp 0.8s 0.6s ease forwards;
+}
+
+.hero-checks {
+display: flex;
+flex-direction: column;
+gap: 10px;
+margin-bottom: 56px;
+opacity: 0;
+animation: fadeUp 0.8s 0.7s ease forwards;
+}
+
+.hero-check {
+display: flex;
+align-items: center;
+gap: 12px;
+font-size: 14px;
+color: var(–cream-dark);
+}
+
+.check-dot {
+width: 6px; height: 6px;
+border-radius: 50%;
+background: var(–gold);
+flex-shrink: 0;
+}
+
+.hero-btn {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+padding: 18px 40px;
+background: var(–gold);
+color: var(–black);
+text-decoration: none;
+font-size: 13px;
+font-weight: 500;
+letter-spacing: 0.2em;
+transition: all 0.3s;
+width: fit-content;
+opacity: 0;
+animation: fadeUp 0.8s 0.9s ease forwards;
+}
+.hero-btn:hover {
+background: var(–gold-light);
+gap: 20px;
+}
+
+.hero-scroll {
+position: absolute;
+bottom: 40px;
+right: 60px;
+writing-mode: vertical-rl;
+font-size: 10px;
+letter-spacing: 0.3em;
+color: var(–muted);
+opacity: 0;
+animation: fadeIn 1s 1.5s ease forwards;
+}
+
+.hero-bg-text {
+position: absolute;
+right: -20px;
+top: 50%;
+transform: translateY(-50%);
+font-family: ‘Cormorant Garamond’, serif;
+font-size: clamp(100px, 18vw, 220px);
+font-weight: 300;
+color: rgba(201,169,110,0.04);
+letter-spacing: -0.02em;
+pointer-events: none;
+white-space: nowrap;
+user-select: none;
+}
+
+/* ── SECTION BASE ── */
+section {
+padding: 100px 60px;
+position: relative;
+}
+
+.section-inner {
+max-width: 980px;
+margin: 0 auto;
+}
+
+.section-label {
+font-size: 10px;
+letter-spacing: 0.5em;
+text-transform: uppercase;
+color: var(–gold);
+margin-bottom: 16px;
+display: flex;
+align-items: center;
+gap: 16px;
+}
+.section-label::before {
+content: ‘’;
+width: 32px;
+height: 1px;
+background: var(–gold);
+}
+
+.section-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(32px, 5vw, 56px);
+font-weight: 400;
+line-height: 1.15;
+color: var(–cream);
+margin-bottom: 40px;
+}
+
+.section-title em {
+font-style: italic;
+color: var(–gold-light);
+}
+
+/* ── DIVIDER ── */
+.divider {
+width: 100%;
+height: 1px;
+background: linear-gradient(to right, transparent, var(–border), transparent);
+}
+
+/* ── PHILOSOPHY ── */
+.philosophy {
+background: var(–black);
+}
+
+.philosophy-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2px;
+margin-top: 60px;
+}
+
+.phil-item {
+padding: 40px;
+background: var(–dark);
+transition: background 0.3s;
+}
+.phil-item:hover { background: var(–charcoal); }
+
+.phil-icon {
+font-size: 11px;
+letter-spacing: 0.3em;
+color: var(–gold);
+margin-bottom: 16px;
+}
+
+.phil-text {
+font-size: 15px;
+color: var(–cream-dark);
+line-height: 1.8;
+}
+
+.phil-no {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+.phil-no-item {
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 14px;
+color: var(–muted);
+}
+
+.x-mark {
+color: #8a4040;
+font-size: 12px;
+}
+
+.check-mark {
+color: var(–gold);
+font-size: 12px;
+}
+
+/* ── COACH ── */
+.coach-section {
+background: var(–charcoal);
+}
+
+.coach-grid {
+display: grid;
+grid-template-columns: 1fr 1fr 1fr;
+gap: 2px;
+margin-top: 60px;
+}
+
+.coach-card {
+padding: 36px 32px;
+background: var(–dark);
+border-top: 2px solid transparent;
+transition: all 0.3s;
+position: relative;
+overflow: hidden;
+}
+
+.coach-card::after {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: var(–gold);
+transform: scaleX(0);
+transform-origin: left;
+transition: transform 0.4s ease;
+}
+
+.coach-card:hover::after { transform: scaleX(1); }
+
+.coach-card-icon {
+font-size: 24px;
+margin-bottom: 20px;
+}
+
+.coach-card-title {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+font-weight: 500;
+color: var(–gold-light);
+margin-bottom: 16px;
+line-height: 1.3;
+}
+
+.coach-card-body {
+font-size: 13px;
+color: var(–muted);
+line-height: 1.9;
+}
+
+.coach-card-body li {
+list-style: none;
+padding: 4px 0;
+border-bottom: 1px solid var(–border-light);
+}
+
+.coach-card-body li:last-child { border-bottom: none; }
+
+.coach-quote {
+grid-column: 1 / -1;
+padding: 48px;
+background: rgba(201,169,110,0.05);
+border: 1px solid var(–border);
+text-align: center;
+margin-top: 2px;
+}
+
+.coach-quote-text {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(18px, 3vw, 26px);
+font-style: italic;
+color: var(–gold-light);
+line-height: 1.5;
+}
+
+/* ── STRENGTHS ── */
+.strengths {
+background: var(–black);
+}
+
+.strengths-list {
+display: flex;
+flex-direction: column;
+gap: 2px;
+margin-top: 60px;
+}
+
+.strength-item {
+display: grid;
+grid-template-columns: 80px 1fr;
+gap: 0;
+background: var(–dark);
+transition: background 0.3s;
+overflow: hidden;
+}
+
+.strength-item:hover { background: #1e1c1a; }
+
+.strength-num {
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 36px;
+font-weight: 300;
+color: rgba(201,169,110,0.2);
+padding: 32px;
+border-right: 1px solid var(–border-light);
+transition: all 0.3s;
+flex-shrink: 0;
+}
+
+.strength-item:hover .strength-num {
+color: var(–gold);
+background: rgba(201,169,110,0.05);
+}
+
+.strength-content {
+padding: 32px 40px;
+}
+
+.strength-title {
+font-size: 16px;
+font-weight: 500;
+color: var(–cream);
+margin-bottom: 10px;
+letter-spacing: 0.05em;
+}
+
+.strength-desc {
+font-size: 13px;
+color: var(–muted);
+line-height: 1.9;
+}
+
+/* ── SYSTEM ── */
+.system-section {
+background: var(–charcoal);
+}
+
+.system-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 2px;
+margin-top: 60px;
+}
+
+.system-item {
+padding: 36px 40px;
+background: var(–dark);
+display: flex;
+align-items: flex-start;
+gap: 20px;
+}
+
+.system-dot {
+width: 8px; height: 8px;
+background: var(–gold);
+border-radius: 50%;
+flex-shrink: 0;
+margin-top: 6px;
+}
+
+.system-text {
+font-size: 14px;
+color: var(–cream-dark);
+line-height: 1.8;
+}
+
+.system-text strong {
+font-weight: 500;
+color: var(–gold-light);
+display: block;
+margin-bottom: 4px;
+}
+
+.system-quote {
+grid-column: 1 / -1;
+padding: 40px;
+text-align: center;
+font-size: 14px;
+color: var(–muted);
+border-top: 1px solid var(–border);
+font-style: italic;
+}
+
+/* ── SPECIAL ── */
+.special-section {
+background: var(–black);
+}
+
+.special-box {
+background: rgba(201,169,110,0.04);
+border: 1px solid var(–border);
+padding: 60px;
+margin-top: 40px;
+}
+
+.special-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(20px, 3vw, 28px);
+color: var(–gold-light);
+margin-bottom: 24px;
+font-style: italic;
+}
+
+.special-desc {
+font-size: 14px;
+color: var(–muted);
+line-height: 2;
+max-width: 600px;
+}
+
+.special-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-top: 28px;
+}
+
+.special-tag {
+padding: 8px 20px;
+border: 1px solid var(–border);
+font-size: 12px;
+color: var(–gold);
+letter-spacing: 0.1em;
+}
+
+.special-results {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+margin-top: 32px;
+}
+
+.special-result {
+padding: 24px;
+background: var(–dark);
+text-align: center;
+}
+
+.result-icon { font-size: 20px; margin-bottom: 10px; }
+.result-text { font-size: 12px; color: var(–muted); line-height: 1.6; }
+
+/* ── PRICING ── */
+.pricing-section {
+background: var(–charcoal);
+}
+
+.pricing-grid {
+display: grid;
+grid-template-columns: 2fr 1fr;
+gap: 2px;
+margin-top: 60px;
+}
+
+.pricing-main {
+background: var(–dark);
+}
+
+.pricing-header {
+padding: 40px;
+border-bottom: 1px solid var(–border-light);
+}
+
+.pricing-name {
+font-family: ‘DM Serif Display’, serif;
+font-size: 28px;
+color: var(–cream);
+margin-bottom: 8px;
+}
+
+.pricing-desc {
+font-size: 13px;
+color: var(–muted);
+line-height: 1.8;
+}
+
+.pricing-options {
+display: flex;
+flex-direction: column;
+}
+
+.price-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 24px 40px;
+border-bottom: 1px solid var(–border-light);
+transition: background 0.2s;
+}
+.price-row:hover { background: rgba(201,169,110,0.03); }
+.price-row:last-child { border-bottom: none; }
+
+.price-row-label { font-size: 13px; color: var(–muted); }
+.price-row-amount {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 28px;
+font-weight: 500;
+color: var(–gold-light);
+}
+.price-row-per { font-size: 11px; color: rgba(201,169,110,0.5); margin-top: 2px; text-align: right; }
+
+.pricing-side {
+display: flex;
+flex-direction: column;
+gap: 2px;
+}
+
+.pricing-side-item {
+flex: 1;
+background: var(–dark);
+padding: 32px;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+}
+
+.side-title {
+font-size: 13px;
+color: var(–gold);
+letter-spacing: 0.1em;
+margin-bottom: 12px;
+}
+
+.side-items {
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.side-item {
+font-size: 12px;
+color: var(–muted);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.side-item::before {
+content: ‘’;
+width: 4px; height: 4px;
+border-radius: 50%;
+background: var(–gold);
+flex-shrink: 0;
+}
+
+.pricing-includes {
+grid-column: 1 / -1;
+background: rgba(201,169,110,0.05);
+border: 1px solid var(–border);
+padding: 32px 40px;
+display: flex;
+flex-wrap: wrap;
+gap: 24px;
+align-items: center;
+}
+
+.includes-label {
+font-size: 10px;
+letter-spacing: 0.4em;
+color: var(–gold);
+text-transform: uppercase;
+white-space: nowrap;
+}
+
+.includes-tags {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+}
+
+.includes-tag {
+font-size: 12px;
+padding: 6px 16px;
+border: 1px solid var(–border);
+color: var(–muted);
+}
+
+/* ── ONEDAY ── */
+.oneday-section {
+background: var(–black);
+}
+
+.oneday-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 2px;
+margin-top: 60px;
+}
+
+.oneday-card {
+background: var(–dark);
+padding: 40px;
+display: flex;
+flex-direction: column;
+gap: 24px;
+transition: background 0.3s;
+position: relative;
+}
+
+.oneday-card:hover { background: #1a1816; }
+
+.oneday-badge {
+position: absolute;
+top: 0; right: 32px;
+background: var(–gold);
+color: var(–black);
+font-size: 10px;
+letter-spacing: 0.2em;
+padding: 6px 16px;
+text-transform: uppercase;
+}
+
+.oneday-title {
+font-family: ‘DM Serif Display’, serif;
+font-size: 24px;
+color: var(–cream);
+line-height: 1.3;
+}
+
+.oneday-features {
+display: flex;
+flex-direction: column;
+gap: 8px;
+}
+
+.oneday-feature {
+font-size: 13px;
+color: var(–muted);
+display: flex;
+align-items: center;
+gap: 10px;
+}
+.oneday-feature::before {
+content: ‘’;
+width: 4px; height: 4px;
+border-radius: 50%;
+background: var(–gold);
+flex-shrink: 0;
+}
+
+.oneday-price {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 40px;
+font-weight: 500;
+color: var(–gold-light);
+border-top: 1px solid var(–border-light);
+padding-top: 20px;
+}
+
+/* ── SCHEDULE ── */
+.schedule-bar {
+background: var(–charcoal);
+padding: 60px;
+}
+
+.schedule-inner {
+max-width: 980px;
+margin: 0 auto;
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+}
+
+.sched-item {
+background: var(–dark);
+padding: 28px 24px;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+}
+
+.sched-dot {
+width: 6px; height: 6px;
+border-radius: 50%;
+background: var(–gold);
+margin-top: 6px;
+flex-shrink: 0;
+}
+
+.sched-text {
+font-size: 13px;
+color: var(–muted);
+line-height: 1.7;
+}
+
+/* ── CTA ── */
+.cta-section {
+background: var(–black);
+padding: 120px 60px;
+text-align: center;
+position: relative;
+overflow: hidden;
+}
+
+.cta-section::before {
+content: ‘’;
+position: absolute;
+inset: 0;
+background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(201,169,110,0.06) 0%, transparent 70%);
+}
+
+.cta-headline {
+font-family: ‘DM Serif Display’, serif;
+font-size: clamp(28px, 5vw, 52px);
+color: var(–cream);
+line-height: 1.3;
+margin-bottom: 16px;
+position: relative;
+}
+
+.cta-headline em { font-style: italic; color: var(–gold-light); }
+
+.cta-sub {
+font-size: 14px;
+color: var(–muted);
+margin-bottom: 48px;
+position: relative;
+}
+
+.cta-items {
+display: flex;
+justify-content: center;
+gap: 40px;
+flex-wrap: wrap;
+margin-bottom: 48px;
+position: relative;
+}
+
+.cta-item {
+font-size: 13px;
+color: var(–cream-dark);
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.cta-item::before {
+content: ‘✔’;
+color: var(–gold);
+font-size: 11px;
+}
+
+.btn-kakao {
+display: inline-flex;
+align-items: center;
+gap: 12px;
+padding: 20px 56px;
+background: #FEE500;
+color: #1a1300;
+font-size: 14px;
+font-weight: 700;
+letter-spacing: 0.05em;
+text-decoration: none;
+transition: all 0.3s;
+position: relative;
+}
+
+.btn-kakao:hover {
+background: #f5d900;
+gap: 20px;
+}
+
+.kakao-icon { font-size: 18px; }
+
+.location-note {
+margin-top: 32px;
+font-size: 12px;
+color: var(–muted);
+position: relative;
+}
+
+/* ── FOOTER ── */
+footer {
+background: #080706;
+padding: 40px 60px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: gap;
+border-top: 1px solid var(–border-light);
+}
+
+.footer-logo {
+font-family: ‘Cormorant Garamond’, serif;
+font-size: 20px;
+letter-spacing: 0.3em;
+color: var(–gold);
+}
+
+.footer-copy {
+font-size: 11px;
+color: #3a3530;
+letter-spacing: 0.1em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+from { opacity: 0; transform: translateY(24px); }
+to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+from { opacity: 0; }
+to { opacity: 1; }
+}
+
+.reveal {
+opacity: 0;
+transform: translateY(24px);
+transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible {
+opacity: 1;
+transform: none;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+nav { padding: 16px 20px; }
+section, .hero, .cta-section { padding: 80px 20px; }
+.schedule-bar { padding: 40px 20px; }
+.coach-grid, .pricing-grid, .oneday-grid { grid-template-columns: 1fr; }
+.philosophy-grid { grid-template-columns: 1fr; }
+.system-grid { grid-template-columns: 1fr; }
+.special-results { grid-template-columns: 1fr 1fr; }
+.schedule-inner { grid-template-columns: 1fr 1fr; }
+.strength-item { grid-template-columns: 60px 1fr; }
+.strength-num { font-size: 28px; padding: 20px; }
+.strength-content { padding: 20px; }
+.special-box { padding: 32px 24px; }
+footer { flex-direction: column; gap: 12px; text-align: center; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- NAV -->
+
+<nav>
+  <a href="#" class="nav-logo">RARADIET</a>
+  <div style="display:flex;align-items:center;gap:20px">
+    <a href="https://instagram.com/rara_daily.fit" target="_blank" style="font-size:11px;letter-spacing:0.2em;color:var(--muted);text-decoration:none;transition:color 0.3s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--muted)'">@rara_daily.fit</a>
+    <a href="#contact" class="nav-cta">카카오 상담 →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero" id="top">
+  <div class="hero-bg-text">RARA</div>
+  <div class="hero-eyebrow">이새롬 코치 · 1:1 오프라인 PT 모집</div>
+  <h1 class="hero-headline">
+    몸을 바꾸고<br>
+    운동을 이해하고<br>
+    <em>더 똑똑해지는 PT</em>
+  </h1>
+  <p class="hero-sub">운동만 하는 PT가 아닙니다.<br>지식 + 구조 + 데이터로 설계하는 코칭입니다.</p>
+  <div class="hero-checks">
+    <div class="hero-check"><span class="check-dot"></span>체형이 바뀝니다</div>
+    <div class="hero-check"><span class="check-dot"></span>근육이 정확히 쓰입니다</div>
+    <div class="hero-check"><span class="check-dot"></span>다이어트 원리를 이해하게 됩니다</div>
+    <div class="hero-check"><span class="check-dot"></span>내 몸을 스스로 관리할 수 있게 됩니다</div>
+  </div>
+  <a href="#contact" class="hero-btn">
+    카카오톡으로 상담하기 →
+  </a>
+  <div class="hero-scroll">scroll ↓</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PHILOSOPHY -->
+
+<section class="philosophy">
+  <div class="section-inner">
+    <div class="section-label reveal">PT 방향성</div>
+    <h2 class="section-title reveal">운동은 <em>'벌'이 아닌</em><br>몸에 대한 투자입니다</h2>
+    <div class="philosophy-grid">
+      <div class="phil-item reveal">
+        <div class="phil-icon">하지 않는 것</div>
+        <div class="phil-no">
+          <div class="phil-no-item"><span class="x-mark">✕</span> 운동으로 벌충하지 않습니다</div>
+          <div class="phil-no-item"><span class="x-mark">✕</span> 굶는 다이어트 하지 않습니다</div>
+          <div class="phil-no-item"><span class="x-mark">✕</span> 극단적 식단을 권하지 않습니다</div>
+        </div>
+      </div>
+      <div class="phil-item reveal">
+        <div class="phil-icon">목표하는 것</div>
+        <div class="phil-no">
+          <div class="phil-no-item"><span class="check-mark">✔</span> 근육 유지 + 체지방 감량</div>
+          <div class="phil-no-item"><span class="check-mark">✔</span> 대사량을 지키는 감량</div>
+          <div class="phil-no-item"><span class="check-mark">✔</span> 체형 구조 개선</div>
+          <div class="phil-no-item"><span class="check-mark">✔</span> 운동 원리 이해</div>
+          <div class="phil-no-item"><span class="check-mark">✔</span> 평생 유지 가능한 루틴 설계</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COACH -->
+
+<section class="coach-section">
+  <div class="section-inner">
+    <div class="section-label reveal">이새롬 코치</div>
+    <h2 class="section-title reveal">감각이 아니라<br><em>데이터로 코칭합니다</em></h2>
+    <div class="coach-grid">
+      <div class="coach-card reveal">
+        <div class="coach-card-icon">🏆</div>
+        <div class="coach-card-title">선수 & 실전 경험</div>
+        <ul class="coach-card-body">
+          <li>비키니·웰니스 그랑프리 및 수상 (2021~2025)</li>
+          <li>개인 바디프로필 다수 진행</li>
+          <li>단체 바디프로필 클래스 운영</li>
+          <li>대회 준비 및 수상 지도 이력 다수</li>
+        </ul>
+      </div>
+      <div class="coach-card reveal" style="transition-delay:0.1s">
+        <div class="coach-card-icon">🏃</div>
+        <div class="coach-card-title">러너 전문 코칭</div>
+        <ul class="coach-card-body">
+          <li>마라톤 9년차 러너</li>
+          <li>부상 없이 기록 향상을 위한 보강운동 전문</li>
+          <li>러너 개인 문제점 분석 후 맞춤 보강 프로그램 설계</li>
+        </ul>
+      </div>
+      <div class="coach-card reveal" style="transition-delay:0.2s">
+        <div class="coach-card-icon">🎓</div>
+        <div class="coach-card-title">학문 기반 전문성</div>
+        <ul class="coach-card-body">
+          <li>한국체육대학교 대학원</li>
+          <li>스포츠 AI &amp; 빅데이터 전공</li>
+          <li>스포츠 데이터 기반 운동 설계 연구</li>
+          <li>체형·움직임 패턴 분석 중심 코칭</li>
+        </ul>
+      </div>
+      <div class="coach-quote reveal">
+        <div class="coach-quote-text">
+          누적 코칭 수강생 500명+ &nbsp;·&nbsp; 클래스101 인기 강의 TOP 10 &nbsp;·&nbsp; 웰크루 전속 코치
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- STRENGTHS -->
+
+<section class="strengths">
+  <div class="section-inner">
+    <div class="section-label reveal">PT 강점</div>
+    <h2 class="section-title reveal">6가지 이유</h2>
+    <div class="strengths-list">
+      <div class="strength-item reveal">
+        <div class="strength-num">01</div>
+        <div class="strength-content">
+          <div class="strength-title">설명이 명확합니다</div>
+          <div class="strength-desc">"왜 이렇게 해야 하는지" 이해시킵니다. 운동을 외우는 것이 아니라 원리를 배우게 됩니다.</div>
+        </div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-num">02</div>
+        <div class="strength-content">
+          <div class="strength-title">자세 교정이 디테일합니다</div>
+          <div class="strength-desc">단순 횟수 채우기 X. 근육이 정확히 쓰이는지 확인하고 몸의 사용 패턴을 바꿉니다.</div>
+        </div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-num">03</div>
+        <div class="strength-content">
+          <div class="strength-title">운동 + 사고방식 교정</div>
+          <div class="strength-desc">벌충 마인드 제거, 극단적 식단 사고 교정, 지속 가능한 루틴 설계. 몸보다 먼저 사고방식이 바뀝니다.</div>
+        </div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-num">04</div>
+        <div class="strength-content">
+          <div class="strength-title">데이터 기반 접근</div>
+          <div class="strength-desc">자체 AI 분석 시스템 활용. 수업 내용을 데이터로 축적하고 구조와 원리 중심으로 설명합니다.</div>
+        </div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-num">05</div>
+        <div class="strength-content">
+          <div class="strength-title">개인화 식단 코칭 제공</div>
+          <div class="strength-desc">체형·활동량·목표 기반 맞춤 식단 설계. 굶는 식단이 아닌 유지 가능한 식단을 설계합니다.</div>
+        </div>
+      </div>
+      <div class="strength-item reveal">
+        <div class="strength-num">06</div>
+        <div class="strength-content">
+          <div class="strength-title">러너 보강 전문 수업 가능</div>
+          <div class="strength-desc">무릎 통증 예방, 햄스트링·둔근 활성화, 코어 안정화, 러닝 효율 개선. 러닝 퍼포먼스를 이해하는 트레이너입니다.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SYSTEM -->
+
+<section class="system-section">
+  <div class="section-inner">
+    <div class="section-label reveal">코칭 시스템</div>
+    <h2 class="section-title reveal">PT는 50분으로<br><em>끝나지 않습니다</em></h2>
+    <div class="system-grid">
+      <div class="system-item reveal">
+        <div class="system-dot"></div>
+        <div class="system-text">
+          <strong>매 수업 개인화 수업노트 제공</strong>
+          AI 분석 기반으로 수업 내용을 정리해드립니다
+        </div>
+      </div>
+      <div class="system-item reveal">
+        <div class="system-dot"></div>
+        <div class="system-text">
+          <strong>전 수업 운동 동작 영상 제공</strong>
+          복습과 자율 운동이 가능하도록 영상을 제공합니다
+        </div>
+      </div>
+      <div class="system-item reveal">
+        <div class="system-dot"></div>
+        <div class="system-text">
+          <strong>10회마다 누적 분석 리포트</strong>
+          데이터로 변화를 확인하고 방향을 조정합니다
+        </div>
+      </div>
+      <div class="system-item reveal">
+        <div class="system-dot"></div>
+        <div class="system-text">
+          <strong>매주 #라라정보통 발송</strong>
+          운동·영양·생활습관 정보를 정기 발송합니다
+        </div>
+      </div>
+      <div class="system-quote reveal">
+        데이터와 지식이 함께 쌓이는 PT입니다
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SPECIAL -->
+
+<section class="special-section">
+  <div class="section-inner">
+    <div class="section-label reveal">호르몬·대사 케어</div>
+    <h2 class="section-title reveal">포기했던 분들도<br><em>변화를 만들어왔습니다</em></h2>
+    <div class="special-box reveal">
+      <div class="special-title">"몸이 예민해서, 호르몬 문제 때문에, 기초대사가 낮아서"</div>
+      <p class="special-desc">데이터 기반 생활습관 설계로 안정적인 변화를 만들어왔습니다. 의료적 치료를 대신하지 않으며, 전문 치료와 병행하는 생활습관 관리 코칭입니다.</p>
+      <div class="special-tags">
+        <div class="special-tag">다낭성 증후군</div>
+        <div class="special-tag">갑상선 기능 저하</div>
+        <div class="special-tag">척추측만·불균형</div>
+      </div>
+      <div class="special-results">
+        <div class="special-result reveal">
+          <div class="result-icon">⚖️</div>
+          <div class="result-text">체중 안정</div>
+        </div>
+        <div class="special-result reveal">
+          <div class="result-icon">💪</div>
+          <div class="result-text">근력 회복</div>
+        </div>
+        <div class="special-result reveal">
+          <div class="result-icon">✨</div>
+          <div class="result-text">통증 감소</div>
+        </div>
+        <div class="special-result reveal">
+          <div class="result-icon">🧍</div>
+          <div class="result-text">체형 균형 개선</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+
+<section class="pricing-section" id="pricing">
+  <div class="section-inner">
+    <div class="section-label reveal">수업료 안내</div>
+    <h2 class="section-title reveal">1:1 퍼스널 트레이닝</h2>
+    <div class="pricing-grid">
+      <div class="pricing-main reveal">
+        <div class="pricing-header">
+          <div class="pricing-name">Personal Training</div>
+          <div class="pricing-desc">1회 50분 · 체형 분석 후 개인 맞춤 설계 · 센터 일일 이용권 포함</div>
+        </div>
+        <div class="pricing-options">
+          <div class="price-row">
+            <div>
+              <div class="price-row-label">10 회권</div>
+            </div>
+            <div>
+              <div class="price-row-amount">700,000원</div>
+              <div class="price-row-per">회당 70,000원</div>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="price-row-label">20 회권 &nbsp;<span style="font-size:10px;background:var(--gold);color:var(--black);padding:2px 8px;">인기</span></div>
+            </div>
+            <div>
+              <div class="price-row-amount">1,350,000원</div>
+              <div class="price-row-per">회당 67,500원</div>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="price-row-label">30 회권</div>
+            </div>
+            <div>
+              <div class="price-row-amount">1,950,000원</div>
+              <div class="price-row-per">회당 65,000원</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-side">
+        <div class="pricing-side-item reveal">
+          <div class="side-title">스케줄 시스템</div>
+          <div class="side-items">
+            <div class="side-item">매주 월요일 차주 스케줄 신청</div>
+            <div class="side-item">유동적 일정 조율 가능</div>
+            <div class="side-item">직장인 최적화</div>
+            <div class="side-item">고정타임 희망 시 우선 배정</div>
+          </div>
+        </div>
+        <div class="pricing-side-item reveal">
+          <div class="side-title">장소</div>
+          <div class="side-items">
+            <div class="side-item">바이젝 휘트니스</div>
+            <div class="side-item">상세 위치 상담 후 안내</div>
+          </div>
+        </div>
+      </div>
+      <div class="pricing-includes reveal">
+        <div class="includes-label">결제 방식</div>
+        <div class="includes-tags">
+          <div class="includes-tag">💳 카드결제</div>
+          <div class="includes-tag">🏦 계좌이체</div>
+          <div class="includes-tag">🧾 현금영수증 발행</div>
+          <div class="includes-tag">✔ 센터 이용권 포함</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ONE DAY -->
+
+<section class="oneday-section">
+  <div class="section-inner">
+    <div class="section-label reveal">원데이 클래스</div>
+    <h2 class="section-title reveal">One Day<br><em>원포인트 클래스</em></h2>
+    <div class="oneday-grid">
+      <div class="oneday-card reveal">
+        <div class="oneday-title">일반 원포인트<br>한 부위 집중</div>
+        <div class="oneday-features">
+          <div class="oneday-feature">60분 수업</div>
+          <div class="oneday-feature">수업 노트 제공</div>
+          <div class="oneday-feature">1주일 온라인 피드백</div>
+        </div>
+        <div class="oneday-price">100,000원</div>
+      </div>
+      <div class="oneday-card reveal">
+        <div class="oneday-badge">신규</div>
+        <div class="oneday-title">러너 개인화<br>보강운동 클래스</div>
+        <div class="oneday-features">
+          <div class="oneday-feature">러닝 자세 및 패턴 분석</div>
+          <div class="oneday-feature">약점 근육 보강 루틴 설계</div>
+          <div class="oneday-feature">부상 예방 보강 프로그램 제공</div>
+          <div class="oneday-feature">수업 노트 + 영상 제공</div>
+        </div>
+        <div class="oneday-price">120,000원</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CTA -->
+
+<section class="cta-section" id="contact">
+  <h2 class="cta-headline reveal">
+    몸을 이해하고<br>
+    스스로 관리할 수 있는<br>
+    <em>사람이 되는 PT</em>
+  </h2>
+  <p class="cta-sub reveal">선착순 모집 중입니다</p>
+  <div class="cta-items reveal">
+    <div class="cta-item">목표</div>
+    <div class="cta-item">운동 경력</div>
+    <div class="cta-item">원하는 시간대</div>
+  </div>
+  <a href="https://open.kakao.com/o/s6mpg1qe" class="btn-kakao reveal" id="kakao-btn"">
+    <span class="kakao-icon">💬</span>
+    카카오톡으로 상담하기
+  </a>
+  <div class="location-note reveal" style="margin-top:24px">📍 바이젝 휘트니스 · 상세 위치 상담 후 안내</div>
+</section>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-logo">RARADIET</div>
+  <div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px">
+    <a href="https://instagram.com/rara_daily.fit" target="_blank" style="font-size:12px;color:var(--gold);text-decoration:none;letter-spacing:0.1em">@rara_daily.fit</a>
+    <div class="footer-copy">© 2025 이새롬 코치 · All rights reserved</div>
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => {
+        entry.target.classList.add('visible');
+      }, 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+reveals.forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
