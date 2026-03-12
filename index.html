@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>라라어트 PT 사전 설문</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FAF7F2;
+    --warm-white: #FFFDF9;
+    --sand: #E8DDD0;
+    --taupe: #C9B9A8;
+    --mocha: #8B6F5E;
+    --espresso: #4A3428;
+    --blush: #E8C4B0;
+    --rose: #C4826A;
+    --text-primary: #2C1810;
+    --text-secondary: #7A5C4E;
+    --text-light: #A8927F;
+    --border: #DDD0C5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Noto Sans KR',sans-serif; background:var(--cream); color:var(--text-primary); min-height:100vh; overflow-x:hidden; }
+  body::before { content:''; position:fixed; inset:0; background-image: radial-gradient(ellipse 80% 60% at 10% 10%, rgba(232,196,176,0.25) 0%, transparent 60%), radial-gradient(ellipse 60% 80% at 90% 90%, rgba(196,130,106,0.12) 0%, transparent 60%); pointer-events:none; z-index:0; }
+
+  header { position:fixed; top:0; left:0; right:0; z-index:100; padding:20px 40px; display:flex; align-items:center; justify-content:space-between; background:rgba(250,247,242,0.88); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); }
+  .logo { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; letter-spacing:0.12em; color:var(--espresso); font-style:italic; }
+  .logo span { font-style:normal; font-weight:300; color:var(--mocha); font-size:13px; letter-spacing:0.2em; display:block; margin-top:2px; }
+  .header-label { font-size:12px; letter-spacing:0.15em; color:var(--text-light); font-weight:300; }
+
+  .progress-track { position:fixed; top:80px; left:0; right:0; height:3px; background:var(--sand); z-index:99; }
+  .progress-fill { height:100%; background:linear-gradient(90deg, var(--blush), var(--rose)); transition:width 0.6s cubic-bezier(0.4,0,0.2,1); border-radius:0 2px 2px 0; }
+
+  main { position:relative; z-index:1; padding-top:100px; padding-bottom:80px; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+
+  /* INTRO */
+  #intro-screen { width:100%; max-width:640px; padding:60px 40px 40px; text-align:center; animation:fadeUp 0.8s ease both; }
+  .intro-badge { display:inline-block; font-size:10px; letter-spacing:0.25em; color:var(--rose); background:rgba(196,130,106,0.1); padding:6px 16px; border-radius:20px; margin-bottom:28px; font-weight:500; }
+  .intro-title { font-family:'Cormorant Garamond',serif; font-size:clamp(36px,6vw,52px); font-weight:300; color:var(--espresso); line-height:1.2; margin-bottom:20px; }
+  .intro-title em { font-style:italic; color:var(--rose); }
+  .intro-desc { font-size:14px; line-height:1.9; color:var(--text-secondary); font-weight:300; margin-bottom:40px; }
+  .intro-meta { display:flex; justify-content:center; gap:32px; margin-bottom:48px; }
+  .intro-meta-item { text-align:center; }
+  .intro-meta-item strong { display:block; font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:400; color:var(--espresso); }
+  .intro-meta-item span { font-size:11px; letter-spacing:0.1em; color:var(--text-light); font-weight:300; }
+  .btn-start { display:inline-flex; align-items:center; gap:10px; background:var(--espresso); color:var(--cream); border:none; padding:16px 40px; border-radius:2px; font-family:'Noto Sans KR',sans-serif; font-size:13px; letter-spacing:0.15em; font-weight:400; cursor:pointer; transition:all 0.3s ease; }
+  .btn-start:hover { background:var(--rose); transform:translateY(-1px); box-shadow:0 8px 24px rgba(196,130,106,0.3); }
+
+  /* STEPS */
+  #steps-container { width:100%; max-width:680px; padding:0 24px; display:none; }
+  .step { display:none; animation:fadeUp 0.5s ease both; }
+  .step.active { display:block; }
+
+  .section-header { margin-bottom:36px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+  .section-number { font-family:'Cormorant Garamond',serif; font-size:72px; font-weight:300; color:var(--sand); line-height:1; margin-bottom:-8px; letter-spacing:-0.05em; }
+  .section-title { font-family:'Cormorant Garamond',serif; font-size:30px; font-weight:400; color:var(--espresso); letter-spacing:0.02em; }
+  .section-subtitle { font-size:13px; color:var(--text-light); font-weight:300; margin-top:6px; }
+
+  .form-grid { display:grid; gap:20px; }
+  .form-grid.cols-2 { grid-template-columns:1fr 1fr; }
+  .form-grid.cols-3 { grid-template-columns:1fr 1fr 1fr; }
+  .field { display:flex; flex-direction:column; gap:8px; }
+  label { font-size:12px; letter-spacing:0.1em; color:var(--text-secondary); font-weight:500; }
+  label .required { color:var(--rose); margin-left:3px; }
+  label .optional { color:var(--text-light); font-weight:300; font-size:10px; margin-left:4px; }
+
+  input[type="text"], input[type="number"], input[type="tel"], select, textarea {
+    background:var(--warm-white); border:1px solid var(--border); border-radius:2px; padding:13px 16px;
+    font-family:'Noto Sans KR',sans-serif; font-size:14px; font-weight:300; color:var(--text-primary);
+    transition:all 0.25s ease; outline:none; width:100%; appearance:none; -webkit-appearance:none;
+  }
+  input:focus, select:focus, textarea:focus { border-color:var(--mocha); box-shadow:0 0 0 3px rgba(139,111,94,0.1); }
+  input::placeholder, textarea::placeholder { color:var(--taupe); font-weight:300; }
+  select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23A8927F' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; cursor:pointer; }
+  textarea { resize:vertical; min-height:90px; line-height:1.7; }
+
+  .pill-group { display:flex; flex-wrap:wrap; gap:8px; }
+  .pill-group input[type="radio"], .pill-group input[type="checkbox"] { display:none; }
+  .pill-group label { font-size:13px; letter-spacing:0.04em; color:var(--text-secondary); font-weight:400; border:1px solid var(--border); padding:9px 18px; border-radius:2px; cursor:pointer; transition:all 0.2s ease; background:var(--warm-white); display:inline-block; line-height:1; }
+  .pill-group input:checked + label { background:var(--espresso); color:var(--cream); border-color:var(--espresso); }
+  .pill-group label:hover { border-color:var(--mocha); color:var(--espresso); }
+
+  .toggle-group { display:flex; gap:0; border:1px solid var(--border); border-radius:2px; overflow:hidden; width:fit-content; }
+  .toggle-group input[type="radio"] { display:none; }
+  .toggle-group label { padding:10px 28px; font-size:13px; color:var(--text-secondary); font-weight:400; cursor:pointer; transition:all 0.2s ease; background:var(--warm-white); border-radius:0; letter-spacing:0.05em; }
+  .toggle-group label:first-of-type { border-right:1px solid var(--border); }
+  .toggle-group input:checked + label { background:var(--espresso); color:var(--cream); }
+
+  /* 체크리스트 */
+  .checklist { display:grid; gap:8px; }
+  .checklist-item { display:flex; align-items:center; gap:12px; padding:12px 16px; border:1px solid var(--border); border-radius:2px; background:var(--warm-white); cursor:pointer; transition:all 0.2s ease; }
+  .checklist-item:hover { border-color:var(--mocha); }
+  .checklist-item input[type="checkbox"] { display:none; }
+  .check-box { width:18px; height:18px; border:1.5px solid var(--border); border-radius:2px; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s ease; }
+  .checklist-item input:checked ~ .check-box, .checklist-item.checked .check-box { background:var(--espresso); border-color:var(--espresso); }
+  .checklist-item input:checked ~ .check-box::after, .checklist-item.checked .check-box::after { content:''; display:block; width:5px; height:9px; border:1.5px solid white; border-top:none; border-left:none; transform:rotate(45deg) translate(-1px,-1px); }
+  .checklist-item span { font-size:13px; color:var(--text-secondary); font-weight:300; }
+  .checklist-item.checked span { color:var(--espresso); }
+
+  .conditional-field { overflow:hidden; max-height:0; opacity:0; transition:all 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .conditional-field.show { max-height:300px; opacity:1; padding-top:16px; }
+
+  .hint { font-size:11px; color:var(--text-light); font-weight:300; margin-top:4px; line-height:1.5; }
+
+  /* 요일 선택 */
+  .day-group { display:flex; gap:8px; flex-wrap:wrap; }
+  .day-group input[type="checkbox"] { display:none; }
+  .day-group label { width:44px; height:44px; display:flex; align-items:center; justify-content:center; border:1px solid var(--border); border-radius:2px; font-size:13px; color:var(--text-secondary); cursor:pointer; transition:all 0.2s ease; background:var(--warm-white); padding:0; letter-spacing:0; }
+  .day-group input:checked + label { background:var(--espresso); color:var(--cream); border-color:var(--espresso); }
+
+  /* NAV */
+  .nav-buttons { display:flex; align-items:center; justify-content:space-between; margin-top:48px; padding-top:28px; border-top:1px solid var(--border); }
+  .btn-back { display:inline-flex; align-items:center; gap:8px; background:transparent; border:1px solid var(--border); color:var(--text-secondary); padding:13px 24px; border-radius:2px; font-family:'Noto Sans KR',sans-serif; font-size:13px; letter-spacing:0.08em; font-weight:400; cursor:pointer; transition:all 0.25s ease; }
+  .btn-back:hover { border-color:var(--mocha); color:var(--espresso); }
+  .btn-next { display:inline-flex; align-items:center; gap:8px; background:var(--espresso); border:none; color:var(--cream); padding:13px 32px; border-radius:2px; font-family:'Noto Sans KR',sans-serif; font-size:13px; letter-spacing:0.12em; font-weight:400; cursor:pointer; transition:all 0.25s ease; margin-left:auto; }
+  .btn-next:hover { background:var(--rose); transform:translateY(-1px); box-shadow:0 6px 20px rgba(196,130,106,0.3); }
+  .btn-submit { background:var(--rose); }
+  .btn-submit:hover { background:var(--espresso); }
+  .step-counter { font-size:12px; color:var(--text-light); letter-spacing:0.1em; }
+
+  /* COMPLETE */
+  #complete-screen { display:none; width:100%; max-width:560px; padding:60px 40px; text-align:center; animation:fadeUp 0.8s ease both; }
+  .complete-icon { width:72px; height:72px; border-radius:50%; background:rgba(196,130,106,0.1); border:1px solid var(--blush); display:flex; align-items:center; justify-content:center; margin:0 auto 32px; }
+  .complete-title { font-family:'Cormorant Garamond',serif; font-size:40px; font-weight:300; color:var(--espresso); margin-bottom:16px; line-height:1.2; }
+  .complete-title em { font-style:italic; color:var(--rose); }
+
+  .section-card { background:var(--warm-white); border:1px solid var(--border); border-radius:2px; padding:20px 24px; }
+  .card-label { font-size:11px; letter-spacing:0.15em; color:var(--rose); font-weight:500; margin-bottom:16px; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+
+  @media (max-width:600px) {
+    header { padding:16px 20px; }
+    .form-grid.cols-2, .form-grid.cols-3 { grid-template-columns:1fr; }
+    #intro-screen, #steps-container { padding:0 16px; }
+    .nav-buttons { flex-wrap:wrap; gap:12px; }
+    .btn-back, .btn-next { width:100%; justify-content:center; }
+    .btn-next { margin-left:0; }
+    .section-number { font-size:48px; }
+    .section-title { font-size:24px; }
+  }
+  ::-webkit-scrollbar { width:4px; }
+  ::-webkit-scrollbar-thumb { background:var(--taupe); border-radius:2px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">raradiet <em style="font-style:italic;font-size:18px;">PT</em>
+    <span>OFFLINE COACHING</span>
+  </div>
+  <div class="header-label" id="header-label">사전 설문</div>
+</header>
+<div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<main>
+
+  <!-- INTRO -->
+  <div id="intro-screen">
+    <div class="intro-badge">OFFLINE PT · PRE-SURVEY</div>
+    <h1 class="intro-title">정확한 프로그램을 위한<br><em>사전 설문</em></h1>
+    <p class="intro-desc">
+      설문 내용을 바탕으로 칼로리를 추정하고<br>
+      회원님께 꼭 맞는 PT 프로그램을 구성해 드려요.<br>
+      솔직하게 작성할수록 더 효과적입니다 😊
+    </p>
+    <div class="intro-meta">
+      <div class="intro-meta-item"><strong>7</strong><span>개 섹션</span></div>
+      <div class="intro-meta-item"><strong>5분</strong><span>소요 시간</span></div>
+      <div class="intro-meta-item"><strong>100%</strong><span>개인 정보 보호</span></div>
+    </div>
+    <button class="btn-start" onclick="startSurvey()">
+      설문 시작하기
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <div id="steps-container">
+
+    <!-- STEP 1: 기본 정보 -->
+    <div class="step active" id="step-1">
+      <div class="section-header">
+        <div class="section-number">01</div>
+        <h2 class="section-title">기본 정보</h2>
+        <p class="section-subtitle">기본적인 신체 정보를 입력해 주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="form-grid cols-2">
+          <div class="field"><label>이름 <span class="required">*</span></label><input type="text" id="name" placeholder="홍길동" /></div>
+          <div class="field"><label>나이 <span class="required">*</span></label><input type="number" id="age" placeholder="만 나이" min="10" max="80" /></div>
+        </div>
+        <div class="field"><label>연락처 <span class="required">*</span></label><input type="tel" id="phone" placeholder="010-0000-0000" /></div>
+        <div class="field">
+          <label>성별 <span class="required">*</span></label>
+          <div class="pill-group">
+            <input type="radio" name="gender" id="g-f" value="여성" /><label for="g-f">여성</label>
+            <input type="radio" name="gender" id="g-m" value="남성" /><label for="g-m">남성</label>
+          </div>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field"><label>키 (cm) <span class="required">*</span></label><input type="number" id="height" placeholder="165" /></div>
+          <div class="field"><label>몸무게 (kg) <span class="required">*</span></label><input type="number" id="weight" placeholder="60" /></div>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field"><label>골격근량 (kg) <span class="optional">선택</span></label><input type="number" id="muscle" placeholder="인바디 결과" step="0.1" /></div>
+          <div class="field"><label>체지방량 (kg) <span class="optional">선택</span></label><input type="number" id="fat" placeholder="인바디 결과" step="0.1" /></div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <span class="step-counter">1 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 2: 목표 & 활동량 -->
+    <div class="step" id="step-2">
+      <div class="section-header">
+        <div class="section-number">02</div>
+        <h2 class="section-title">목표 &amp; 활동량</h2>
+        <p class="section-subtitle">PT 목표와 현재 활동 수준을 알려주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>PT 목표 <span class="required">*</span></label>
+          <div class="pill-group">
+            <input type="checkbox" id="goal-loss" /><label for="goal-loss">체중 감량</label>
+            <input type="checkbox" id="goal-maintain" /><label for="goal-maintain">체중 유지</label>
+            <input type="checkbox" id="goal-gain" /><label for="goal-gain">체중 증량</label>
+            <input type="checkbox" id="goal-recomp" /><label for="goal-recomp">체형 개선</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>PT를 시작하게 된 계기 &amp; 현재 고민</label>
+          <textarea id="motivation" placeholder="솔직하게 작성해 주시면 더 정확한 프로그램을 제공할 수 있어요."></textarea>
+        </div>
+        <div class="field">
+          <label>PT를 통해 이루고 싶은 변화</label>
+          <textarea id="goal-detail" placeholder="구체적으로 적어주실수록 좋아요."></textarea>
+        </div>
+        <div class="field">
+          <label>평소 활동 수준 <span class="required">*</span></label>
+          <div class="pill-group">
+            <input type="radio" name="activity" id="act-1" /><label for="act-1">거의 움직이지 않음</label>
+            <input type="radio" name="activity" id="act-2" /><label for="act-2">가벼운 활동 (주 1-2회)</label>
+            <input type="radio" name="activity" id="act-3" /><label for="act-3">보통 활동 (주 3-4회)</label>
+            <input type="radio" name="activity" id="act-4" /><label for="act-4">활발한 활동 (주 5-6회)</label>
+            <input type="radio" name="activity" id="act-5" /><label for="act-5">매우 활발함</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>운동 경력</label>
+          <div class="pill-group">
+            <input type="radio" name="exp" id="exp-0" /><label for="exp-0">없음</label>
+            <input type="radio" name="exp" id="exp-1" /><label for="exp-1">3개월 미만</label>
+            <input type="radio" name="exp" id="exp-2" /><label for="exp-2">3~6개월</label>
+            <input type="radio" name="exp" id="exp-3" /><label for="exp-3">6개월~1년</label>
+            <input type="radio" name="exp" id="exp-4" /><label for="exp-4">1년 이상</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>유산소 능력 (현재 상태)</label>
+          <div class="pill-group">
+            <input type="radio" name="cardio" id="ca-1" /><label for="ca-1">계단 1-2층도 힘듦</label>
+            <input type="radio" name="cardio" id="ca-2" /><label for="ca-2">빠르게 걷기 10분 가능</label>
+            <input type="radio" name="cardio" id="ca-3" /><label for="ca-3">빠르게 걷기 30분 이상</label>
+            <input type="radio" name="cardio" id="ca-4" /><label for="ca-4">가볍게 뛰기 10분 가능</label>
+            <input type="radio" name="cardio" id="ca-5" /><label for="ca-5">가볍게 뛰기 30분 이상</label>
+            <input type="radio" name="cardio" id="ca-6" /><label for="ca-6">러닝 1시간 이상 가능</label>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">2 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 3: 건강 상태 -->
+    <div class="step" id="step-3">
+      <div class="section-header">
+        <div class="section-number">03</div>
+        <h2 class="section-title">건강 상태</h2>
+        <p class="section-subtitle">안전한 PT를 위해 건강 정보를 알려주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>건강 상태 (복수 선택 가능)</label>
+          <div class="pill-group">
+            <input type="checkbox" id="health-none" /><label for="health-none">해당 없음</label>
+            <input type="checkbox" id="health-diabetes" /><label for="health-diabetes">당뇨</label>
+            <input type="checkbox" id="health-thyroid" /><label for="health-thyroid">갑상선 질환</label>
+            <input type="checkbox" id="health-bp" /><label for="health-bp">고혈압</label>
+            <input type="checkbox" id="health-cholesterol" /><label for="health-cholesterol">고지혈증</label>
+            <input type="checkbox" id="health-etc" /><label for="health-etc">기타</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>기타 건강 상태 <span class="optional">선택</span></label>
+          <textarea placeholder="부상 이력, 통증 부위, 수술 이력 등 자유롭게 작성해 주세요." style="min-height:70px;"></textarea>
+        </div>
+        <div class="field">
+          <label>현재 복용 중인 약물</label>
+          <div class="toggle-group">
+            <input type="radio" name="medicine" id="med-n" value="없음" /><label for="med-n">없음</label>
+            <input type="radio" name="medicine" id="med-y" value="있음" onchange="toggleMed(true)" /><label for="med-y">있음</label>
+          </div>
+          <div class="conditional-field" id="med-detail">
+            <input type="text" placeholder="약물명을 입력해 주세요" style="margin-top:0;" />
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">3 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 4: PT 일정 -->
+    <div class="step" id="step-4">
+      <div class="section-header">
+        <div class="section-number">04</div>
+        <h2 class="section-title">PT 일정</h2>
+        <p class="section-subtitle">수업 가능한 시간대를 알려주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>PT 가능한 요일 (복수 선택)</label>
+          <div class="day-group">
+            <input type="checkbox" id="day-mon" /><label for="day-mon">월</label>
+            <input type="checkbox" id="day-tue" /><label for="day-tue">화</label>
+            <input type="checkbox" id="day-wed" /><label for="day-wed">수</label>
+            <input type="checkbox" id="day-thu" /><label for="day-thu">목</label>
+            <input type="checkbox" id="day-fri" /><label for="day-fri">금</label>
+            <input type="checkbox" id="day-sat" /><label for="day-sat">토</label>
+            <input type="checkbox" id="day-sun" /><label for="day-sun">일</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>선호 시간대 (복수 선택)</label>
+          <div class="pill-group">
+            <input type="checkbox" id="time-1" /><label for="time-1">오전 6-9시</label>
+            <input type="checkbox" id="time-2" /><label for="time-2">오전 9-12시</label>
+            <input type="checkbox" id="time-3" /><label for="time-3">점심 12-14시</label>
+            <input type="checkbox" id="time-4" /><label for="time-4">오후 14-18시</label>
+            <input type="checkbox" id="time-5" /><label for="time-5">저녁 18-21시</label>
+            <input type="checkbox" id="time-6" /><label for="time-6">야간 21시 이후</label>
+          </div>
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>희망 PT 횟수 (주당)</label>
+            <select>
+              <option value="" disabled selected>선택</option>
+              <option>주 1회</option>
+              <option>주 2회</option>
+              <option>주 3회</option>
+              <option>주 4회</option>
+              <option>주 5회 이상</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>개인 운동 가능 횟수 (PT 외)</label>
+            <select>
+              <option value="" disabled selected>선택</option>
+              <option>불가능 (PT만 할 예정)</option>
+              <option>주 1회</option>
+              <option>주 2회</option>
+              <option>주 3회</option>
+              <option>주 4회</option>
+              <option>주 5회 이상</option>
+              <option>매일 가능</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">4 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 5: 식습관 -->
+    <div class="step" id="step-5">
+      <div class="section-header">
+        <div class="section-number">05</div>
+        <h2 class="section-title">식습관</h2>
+        <p class="section-subtitle">칼로리 추정에 중요한 정보예요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>식이 제한 (복수 선택)</label>
+          <div class="pill-group">
+            <input type="checkbox" id="diet-none" /><label for="diet-none">없음</label>
+            <input type="checkbox" id="diet-lactose" /><label for="diet-lactose">유제품 불내증</label>
+            <input type="checkbox" id="diet-veg" /><label for="diet-veg">채식주의</label>
+            <input type="checkbox" id="diet-etc" /><label for="diet-etc">기타</label>
+          </div>
+        </div>
+        <div class="field">
+          <label>알레르기 / 기타 제한사항 <span class="optional">선택</span></label>
+          <input type="text" placeholder="예: 견과류, 갑각류 등" />
+        </div>
+        <div class="form-grid cols-2">
+          <div class="field">
+            <label>하루 평균 식사 횟수</label>
+            <select>
+              <option value="" disabled selected>선택</option>
+              <option>1끼</option>
+              <option>2끼</option>
+              <option>3끼</option>
+              <option>4끼 이상</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>외식 빈도</label>
+            <select>
+              <option value="" disabled selected>선택</option>
+              <option>거의 안함 (주 0회)</option>
+              <option>주 1-2회</option>
+              <option>주 3-4회</option>
+              <option>주 5회 이상</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label>평균 수면 시간</label>
+          <div class="pill-group">
+            <input type="radio" name="sleep" id="sl-1" /><label for="sl-1">5시간 이하</label>
+            <input type="radio" name="sleep" id="sl-2" /><label for="sl-2">5-6시간</label>
+            <input type="radio" name="sleep" id="sl-3" /><label for="sl-3">6-7시간</label>
+            <input type="radio" name="sleep" id="sl-4" /><label for="sl-4">7-8시간</label>
+            <input type="radio" name="sleep" id="sl-5" /><label for="sl-5">8시간 이상</label>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">5 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 6: 습관 체크리스트 -->
+    <div class="step" id="step-6">
+      <div class="section-header">
+        <div class="section-number">06</div>
+        <h2 class="section-title">습관 체크</h2>
+        <p class="section-subtitle">해당되는 항목을 모두 선택해 주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="section-card">
+          <div class="card-label">🍴 식습관</div>
+          <div class="checklist">
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>폭식을 자주 하는 편</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>식사 시간이 불규칙함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>야식을 자주 먹음 (주 3회 이상)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>단 음식 / 음료를 자주 섭취함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>배달음식 / 가공식품 자주 먹음 (주 4회 이상)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>아침을 거의 안 먹음</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>물을 잘 안 마심 (하루 1L 미만)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>스트레스받으면 먹는 편</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>소화가 잘 안됨 (더부룩함 / 속쓰림)</span></label>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="card-label">💪 운동 습관</div>
+          <div class="checklist">
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>하루 대부분 앉아서 생활함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>운동 시간 / 요일이 불규칙함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>운동 전후 스트레칭을 안 함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>걷는 시간이 적음 (하루 30분 미만)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>운동을 작심삼일로 끝내는 경우가 많음</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>주말에는 거의 안 움직임</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>운동 강도 조절이 어려움</span></label>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="card-label">😴 생활 습관</div>
+          <div class="checklist">
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>수면 시간이 불규칙함</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>자정 이후에 잠드는 경우가 많음</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>아침에 일어나기 힘듦 (개운하지 않음)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>변비 / 소화 문제가 있음</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>스트레스가 많은 편</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>음주를 자주 함 (주 3회 이상)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>카페인을 과다 섭취함 (하루 3잔 이상)</span></label>
+            <label class="checklist-item"><input type="checkbox" /><div class="check-box"></div><span>만성 피로감을 느낌</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">6 / 7</span>
+        <button class="btn-next" onclick="nextStep()">다음 <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+
+    <!-- STEP 7: 마지막 -->
+    <div class="step" id="step-7">
+      <div class="section-header">
+        <div class="section-number">07</div>
+        <h2 class="section-title">마지막으로</h2>
+        <p class="section-subtitle">코치에게 자유롭게 전달하고 싶은 내용을 남겨주세요.</p>
+      </div>
+      <div class="form-grid">
+        <div class="field">
+          <label>코치에게 하고 싶은 말 / 기타 전달 사항 <span class="optional">선택</span></label>
+          <textarea id="extra" placeholder="부상 이력, 특별히 신경 써줬으면 하는 부분, 기타 궁금한 점 등 자유롭게 적어주세요."></textarea>
+        </div>
+      </div>
+      <div class="nav-buttons">
+        <button class="btn-back" onclick="prevStep()"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M12 7H2M6 3L2 7l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> 이전</button>
+        <span class="step-counter">7 / 7</span>
+        <button class="btn-next btn-submit" id="submit-btn" onclick="submitSurvey()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l4 4 6-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          설문 제출하기
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- COMPLETE -->
+  <div id="complete-screen">
+    <div class="complete-icon">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M5 14l6 6L23 8" stroke="#C4826A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2 class="complete-title">설문이<br><em>완료</em>되었어요</h2>
+    <p style="font-size:14px; line-height:1.9; color:var(--text-secondary); font-weight:300; margin-top:20px;">
+      소중한 답변 감사합니다 😊<br><br>
+      내용을 바탕으로 맞춤 프로그램을 구성해<br>
+      첫 수업 전에 안내해 드릴게요!
+    </p>
+  </div>
+
+</main>
+
+<script>
+  let currentStep = 0;
+  const totalSteps = 7;
+
+  function startSurvey() {
+    document.getElementById('intro-screen').style.display = 'none';
+    document.getElementById('steps-container').style.display = 'block';
+    updateProgress(1);
+  }
+
+  function updateProgress(step) {
+    document.getElementById('progress-fill').style.width = (step / totalSteps * 100) + '%';
+    document.getElementById('header-label').textContent = step + ' / ' + totalSteps;
+  }
+
+  function nextStep() {
+    const steps = document.querySelectorAll('.step');
+    if (currentStep < steps.length - 1) {
+      steps[currentStep].classList.remove('active');
+      currentStep++;
+      steps[currentStep].classList.add('active');
+      updateProgress(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function prevStep() {
+    const steps = document.querySelectorAll('.step');
+    if (currentStep > 0) {
+      steps[currentStep].classList.remove('active');
+      currentStep--;
+      steps[currentStep].classList.add('active');
+      updateProgress(currentStep + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  function toggleMed(show) {
+    document.getElementById('med-detail').classList.toggle('show', show);
+  }
+
+  // 체크리스트 토글
+  document.addEventListener('change', function(e) {
+    if (e.target.type === 'checkbox') {
+      const item = e.target.closest('.checklist-item');
+      if (item) item.classList.toggle('checked', e.target.checked);
+    }
+  });
+
+  function getCheckedLabels(ids) {
+    return ids.filter(id => { const el = document.getElementById(id); return el && el.checked; })
+      .map(id => document.querySelector('label[for="' + id + '"]')?.textContent?.trim())
+      .filter(Boolean).join(', ');
+  }
+
+  function getRadioLabel(name) {
+    const el = document.querySelector('input[name="' + name + '"]:checked');
+    if (!el) return '';
+    return document.querySelector('label[for="' + el.id + '"]')?.textContent?.trim() || '';
+  }
+
+  function getChecklistItems(cardIndex) {
+    const cards = document.querySelectorAll('.section-card');
+    if (!cards[cardIndex]) return '';
+    const checked = cards[cardIndex].querySelectorAll('input[type="checkbox"]:checked');
+    return Array.from(checked).map(el => el.closest('.checklist-item')?.querySelector('span')?.textContent?.trim()).filter(Boolean).join(', ') || '해당 없음';
+  }
+
+  async function submitSurvey() {
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="animation:spin 1s linear infinite"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" opacity="0.3"/><path d="M12 2a10 10 0 0 1 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 저장 중...';
+
+    const data = {
+      이름: document.getElementById('name')?.value || '',
+      연락처: document.getElementById('phone')?.value || '',
+      나이: document.getElementById('age')?.value || '',
+      성별: getRadioLabel('gender'),
+      키: document.getElementById('height')?.value || '',
+      몸무게: document.getElementById('weight')?.value || '',
+      골격근량: document.getElementById('muscle')?.value || '',
+      체지방량: document.getElementById('fat')?.value || '',
+      PT목표: getCheckedLabels(['goal-loss','goal-maintain','goal-gain','goal-recomp']),
+      계기고민: document.getElementById('motivation')?.value || '',
+      희망변화: document.getElementById('goal-detail')?.value || '',
+      활동수준: getRadioLabel('activity'),
+      운동경력: getRadioLabel('exp'),
+      유산소능력: getRadioLabel('cardio'),
+      건강상태: getCheckedLabels(['health-none','health-diabetes','health-thyroid','health-bp','health-cholesterol','health-etc']),
+      약물: getRadioLabel('medicine'),
+      가능요일: getCheckedLabels(['day-mon','day-tue','day-wed','day-thu','day-fri','day-sat','day-sun']),
+      선호시간대: getCheckedLabels(['time-1','time-2','time-3','time-4','time-5','time-6']),
+      식이제한: getCheckedLabels(['diet-none','diet-lactose','diet-veg','diet-etc']),
+      수면시간: getRadioLabel('sleep'),
+      식습관체크: getChecklistItems(0),
+      운동습관체크: getChecklistItems(1),
+      생활습관체크: getChecklistItems(2),
+      기타전달: document.getElementById('extra')?.value || '',
+      type: 'offline'
+    };
+
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || '서버 오류');
+      }
+    } catch(e) {
+      console.error('저장 오류:', e);
+      btn.disabled = false;
+      btn.innerHTML = '설문 제출하기';
+      alert('저장 중 오류가 발생했어요 😢\n\n' + e.message);
+      return;
+    }
+
+    document.getElementById('steps-container').style.display = 'none';
+    document.getElementById('complete-screen').style.display = 'block';
+    document.getElementById('progress-fill').style.width = '100%';
+    document.getElementById('header-label').textContent = '완료';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
